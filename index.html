@@ -1,87 +1,149 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Generated Successfully</title><style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
-
-    body {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-    }
-
-    .card {
-        width: 90%;
-        max-width: 420px;
-        padding: 40px 25px;
-        text-align: center;
-        background: #fff;
-        border-radius: 25px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-    }
-
-    .success-icon {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #22c55e;
-        color: white;
-        font-size: 45px;
-        font-weight: bold;
-        border-radius: 50%;
-        box-shadow: 0 8px 20px rgba(34, 197, 94, 0.35);
-    }
-
-    h1 {
-        color: #222;
-        font-size: 27px;
-        margin-bottom: 12px;
-    }
-
-    p {
-        color: #777;
-        font-size: 16px;
-        line-height: 1.5;
-    }
-
-    .status {
-        margin-top: 25px;
-        padding: 14px;
-        background: #f0fdf4;
-        color: #16a34a;
-        border-radius: 12px;
-        font-weight: bold;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QR Treasure Hunt - Team 1</title>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;min-height:100vh;background:linear-gradient(135deg,#111827,#1e3a8a,#312e81);color:#fff;display:flex;justify-content:center;align-items:center;padding:20px}
+.container{width:100%;max-width:500px}.card{background:rgba(255,255,255,.1);backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,.2);border-radius:25px;padding:25px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.logo{text-align:center;font-size:42px;margin-bottom:10px}h1{text-align:center;font-size:28px;margin-bottom:8px}.subtitle{text-align:center;color:#cbd5e1;margin-bottom:25px}
+.progress-container{margin:20px 0}.progress-text{display:flex;justify-content:space-between;margin-bottom:8px;color:#cbd5e1}.progress-bar{width:100%;height:12px;background:rgba(255,255,255,.15);border-radius:20px;overflow:hidden}.progress-fill{height:100%;width:0;background:#22c55e;transition:.5s}
+#reader{width:100%;border-radius:15px;overflow:hidden;margin:15px 0;background:#000}.scan-info{text-align:center;color:#cbd5e1;margin:10px 0}
+.task-number{text-align:center;color:#93c5fd;font-size:18px;font-weight:bold;margin-bottom:10px}.location{background:rgba(59,130,246,.2);border:1px solid rgba(147,197,253,.3);padding:12px;border-radius:12px;text-align:center;margin-bottom:20px}.question{font-size:21px;line-height:1.5;text-align:center;margin-bottom:20px}
+input{width:100%;padding:14px;border-radius:12px;border:none;outline:none;margin-bottom:15px;font-size:16px}
+button{width:100%;padding:14px;border:none;border-radius:12px;background:#2563eb;color:#fff;font-size:17px;font-weight:bold;cursor:pointer;margin-top:8px}button:hover{background:#1d4ed8}button.secondary{background:#475569}button.success{background:#16a34a}
+.hidden{display:none!important}.message{text-align:center;padding:15px;border-radius:12px;margin-top:15px;font-weight:bold}.success-message{background:rgba(34,197,94,.2);color:#86efac;border:1px solid #22c55e}.error-message{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid #ef4444}.wait-message{background:rgba(234,179,8,.2);color:#fde68a;border:1px solid #eab308}
+.task-list{margin-top:20px}.task-item{display:flex;justify-content:space-between;padding:12px;margin-bottom:8px;background:rgba(255,255,255,.08);border-radius:10px}.done{color:#4ade80}.locked{color:#94a3b8}.current{color:#60a5fa}
+.final-screen{text-align:center}.trophy{font-size:90px}.final-screen h2{font-size:32px;color:#fde047;margin:15px 0}.small{font-size:13px;color:#94a3b8;text-align:center;margin-top:15px}
 </style>
+</head>
+<body>
+<div class="container">
+<div id="gameScreen" class="card">
+<div class="logo">🏆</div>
+<h1>QR TREASURE HUNT</h1>
+<p class="subtitle">TEAM 1 • Scan • Solve • Continue</p>
 
-</head><body><div class="card">
-
-    <div class="success-icon">
-        ✓
-    </div>
-
-    <h1>QR Code Generated Successfully!</h1>
-
-    <p>
-        Your QR code has been generated successfully.
-    </p>
-
-    <div class="status">
-        Ready to use
-    </div>
-
+<div class="progress-container">
+<div class="progress-text"><span>Progress</span><span id="progressText">0 / 10</span></div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 </div>
 
+<div id="scannerSection">
+<h1>📷 Scan QR Code</h1>
+<p class="scan-info">Allow camera permission, then scan the QR code at the current location.</p>
+<div id="reader"></div>
+<button class="secondary" onclick="stopScanner()">Stop Scanner</button>
+</div>
+
+<div id="taskSection" class="hidden">
+<div class="task-number" id="taskNumber"></div>
+<div class="location" id="taskLocation"></div>
+<div class="question" id="question"></div>
+<input id="answerInput" type="text" placeholder="Enter your answer" autocomplete="off">
+<button onclick="checkAnswer()">CHECK ANSWER</button>
+<div id="message"></div>
+<button id="nextTaskButton" class="success hidden" onclick="goToNextTask()">➡️ GO TO NEXT TASK</button>
+</div>
+
+<div class="task-list" id="taskList"></div>
+</div>
+
+<div id="finalScreen" class="card hidden final-screen">
+<div class="trophy">🏆</div>
+<h2>CONGRATULATIONS!</h2>
+<p>TEAM 1 completed all 10 tasks!</p><br>
+<p>🎉 TREASURE HUNT COMPLETED 🎉</p>
+</div>
+</div>
+
+<script>
+const TEAM = "team1";
+const tasks = [{qr:"TASK1",location:'Location 1',question:'What is 5 + 5?',answer:'10'},
+{qr:"TASK2",location:'Location 2',question:'What is the capital of India?',answer:'delhi'},
+{qr:"TASK3",location:'Location 3',question:'How many days are there in a week?',answer:'7'},
+{qr:"TASK4",location:'Location 4',question:'What color is the sky on a clear day?',answer:'blue'},
+{qr:"TASK5",location:'Location 5',question:'How many months are there in a year?',answer:'12'},
+{qr:"TASK6",location:'Location 6',question:'What is 10 × 10?',answer:'100'},
+{qr:"TASK7",location:'Location 7',question:'How many letters are in the English alphabet?',answer:'26'},
+{qr:"TASK8",location:'Location 8',question:'What planet do we live on?',answer:'earth'},
+{qr:"TASK9",location:'Location 9',question:'What is 50 ÷ 5?',answer:'10'},
+{qr:"TASK10",location:'Location 10',question:'What is the final number? Enter 10.',answer:'10'}];
+let currentTask = parseInt(localStorage.getItem("treasure_"+TEAM) || "0",10);
+let scanner = null;
+
+function updateProgress(){
+ document.getElementById("progressText").innerText=currentTask+" / "+tasks.length;
+ document.getElementById("progressFill").style.width=(currentTask/tasks.length*100)+"%";
+}
+function updateTaskList(){
+ const list=document.getElementById("taskList"); list.innerHTML="";
+ tasks.forEach((t,i)=>{
+   let s=i<currentTask?'<span class="done">✓ Completed</span>':i===currentTask?'<span class="current">▶ Current</span>':'<span class="locked">🔒 Locked</span>';
+   list.innerHTML+=`<div class="task-item"><span>Task ${i+1}</span>${s}</div>`;
+ });
+}
+function startScanner(){
+ if(scanner) return;
+ scanner=new Html5Qrcode("reader");
+ scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:250}},onScanSuccess,()=>{})
+ .catch(()=>alert("Camera permission is required. Please allow camera access and try again."));
+}
+function onScanSuccess(decodedText){
+ if(decodedText.trim().toUpperCase()===tasks[currentTask].qr){
+   stopScanner(); showTask();
+ }else{
+   alert("❌ Wrong QR Code! Please scan the QR code for Task "+(currentTask+1)+".");
+ }
+}
+function stopScanner(){
+ if(scanner){
+   scanner.stop().then(()=>{scanner.clear();scanner=null;}).catch(()=>{scanner=null;});
+ }
+}
+function showTask(){
+ const t=tasks[currentTask];
+ document.getElementById("scannerSection").classList.add("hidden");
+ document.getElementById("taskSection").classList.remove("hidden");
+ document.getElementById("taskNumber").innerText="TASK "+(currentTask+1);
+ document.getElementById("taskLocation").innerText="📍 "+t.location;
+ document.getElementById("question").innerText=t.question;
+ document.getElementById("answerInput").value="";
+ document.getElementById("answerInput").disabled=false;
+ document.getElementById("message").innerHTML="";
+ document.getElementById("nextTaskButton").classList.add("hidden");
+}
+function checkAnswer(){
+ const input=document.getElementById("answerInput").value.trim().toLowerCase();
+ const correct=tasks[currentTask].answer.trim().toLowerCase();
+ const message=document.getElementById("message");
+ if(!input){message.innerHTML='<div class="message wait-message">⚠️ Please enter your answer.</div>';return;}
+ if(input===correct){
+   message.innerHTML='<div class="message success-message">✅ SUCCESSFULLY COMPLETED!<br><br>Task '+(currentTask+1)+' completed.</div>';
+   currentTask++;
+   localStorage.setItem("treasure_"+TEAM,currentTask);
+   updateProgress();updateTaskList();
+   document.getElementById("answerInput").disabled=true;
+   if(currentTask>=tasks.length) setTimeout(showFinalScreen,800);
+   else document.getElementById("nextTaskButton").classList.remove("hidden");
+ }else{
+   message.innerHTML='<div class="message error-message">❌ WRONG ANSWER<br><br>TRY AGAIN!</div>';
+ }
+}
+function goToNextTask(){
+ document.getElementById("taskSection").classList.add("hidden");
+ document.getElementById("scannerSection").classList.remove("hidden");
+ startScanner();
+}
+function showFinalScreen(){
+ stopScanner();
+ document.getElementById("gameScreen").classList.add("hidden");
+ document.getElementById("finalScreen").classList.remove("hidden");
+}
+updateProgress();updateTaskList();startScanner();
+</script>
 </body>
 </html>
